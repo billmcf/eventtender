@@ -17,24 +17,41 @@ router.get('/', function(req, res, next) {
     }
   })
 });
-
 router.post('/', (req, res, next)=>{
   if(Object.keys(req.cookies).length===0){
     return next(boom.create(400, 'user access only'));
   }
   var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY);
   req.body.user_id=reveal;
-  // res.send(req.body)
   knex('events').max('id').then((max)=>{
     var id=max[0]['max']+1;
     req.body.id=id;
-    knex('events').insert(req.body).then(()=>{
-      res.send("Event Added")
+    knex('events').insert(req.body).then((event)=>{
+      knex('events').where({id: id}).then((event)=>{
+        delete event[0].user_id
+        res.send(event)
+      })
     })
   })
 })
 router.delete('/', (req, res, next)=>{
-  res.send('events delete')
+  if(Object.keys(req.cookies).length===0){
+    return next(boom.create(400, 'user access only'));
+  }
+  if(!req.body.eventId){
+    return next(boom.create(400, 'Please enter and event ID'));
+  }
+  const eventId = Number.parseInt(req.body.eventId);
+  if (!Number.isInteger(eventId)) {
+    return next(boom.create(400, 'Event ID must be an integer'));
+  }
+  var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY)
+  console.log(eventId);
+  knex('events').select('id').then((id)=>{
+    res.send(id)
+  })
+
+
 })
 
 module.exports = router;
