@@ -39,7 +39,7 @@ router.post('/', (req, res, next)=>{
         expires: new Date(Date.now() + 302400000),
         secure: router.get('env') === 'production'
       })
-      res.send(user)
+      res.send('Login Succesful')
     })
       .catch((err) => {
      next(err);
@@ -47,7 +47,7 @@ router.post('/', (req, res, next)=>{
   })
 })
 router.delete('/', (req, res)=>{
-  
+
   res.clearCookie('token')
   res.end();
 })
