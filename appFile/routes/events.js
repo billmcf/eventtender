@@ -44,14 +44,25 @@ router.delete('/', (req, res, next)=>{
   const eventId = Number.parseInt(req.body.eventId);
   if (!Number.isInteger(eventId)) {
     return next(boom.create(400, 'Event ID must be an integer'));
-  }
+}
   var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY)
-  console.log(eventId);
-  knex('events').select('id').then((id)=>{
-    res.send(id)
+
+  knex('events').select('id').where({user_id: reveal}).then((id)=>{
+    if(id.length===0){
+      return next(boom.create(400, 'You have no events to delete.'))
+    }
+    var trackerPing=0;
+    for(var i=0; i<id.length; i++){
+      if(id[i]['id']===eventId){
+        trackerPing++;
+      }
+    }
+    if(trackerPing===0){
+      return next(boom.create(400, 'Event is not associated with your account'))
+    }else{
+      res.send('We found the event')
+    }
   })
-
-
 })
 
 module.exports = router;
