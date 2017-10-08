@@ -5,8 +5,8 @@ const bcrypt= require('bcrypt');
 const knex= require('../knex');
 const emailReg= /@/;
 const boom= require('boom')
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+
+router.get('/', function(err, req, res, next) {
 
   jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, _payload)=>{
     if(err){
@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
   })
 });
 
-router.post('/', (req, res, next)=>{
+router.post('/', (err, req, res, next)=>{
   if(!req.body.email||!req.body.email.trim()||emailReg.test(req.body.email)===false){
     return next(boom.create(400, 'please input an email'))
   }
