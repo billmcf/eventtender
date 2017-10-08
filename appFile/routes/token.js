@@ -7,6 +7,7 @@ const knex= require('../knex');
 const emailReg= /@/;
 const boom= require('boom')
 
+
 router.get('/', function(req, res, next) {
   jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, _payload)=>{
     if(err){
