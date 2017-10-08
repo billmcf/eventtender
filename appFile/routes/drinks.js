@@ -1,15 +1,16 @@
 var express = require('express');
+var knex= require('../knex')
 var router = express.Router();
 
-/* GET users listing. */
+
 router.get('/', function(req, res, next) {
-  res.send('favorites get');
+  res.send('drinks get');
 });
 router.post('/', (req, res, next)=>{
-  res.send('favorites post')
+  res.send('drinks post')
 })
 router.delete('/', (req, res, next)=>{
-  res.send('favorites delete')
+  res.send('drinks delete')
 })
 
 module.exports = router;

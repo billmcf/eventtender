@@ -11,9 +11,9 @@ var morgan= require('morgan')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var facebook= require('./routes/facebook');
-var favorites= require('./routes/favorites');
-var token= require('./routes/token')
+var events= require('./routes/events');
+var token= require('./routes/token');
+var drinks = require('./routes/drinks');
 
 var app = express();
 
@@ -33,8 +33,8 @@ app.use(passport.session());
 app.use(flash())
 app.use('/', index);
 app.use('/users', users);
-app.use('/auth/facebook', facebook);
-app.use('/favorites', favorites);
+app.use('/events', events);
+app.use('/drinks', drinks)
 app.use('/token', token);
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
