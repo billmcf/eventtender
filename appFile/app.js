@@ -14,7 +14,6 @@ var users = require('./routes/users');
 var events= require('./routes/events');
 var token= require('./routes/token');
 var drinks = require('./routes/drinks');
-
 var app = express();
 
 // view engine setup
@@ -31,16 +30,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize())
 app.use(passport.session());
 app.use(flash())
-app.use('/', index);
-app.use('/users', users);
-app.use('/events', events);
+app.use('/', index)
+app.use('/token', token)
+app.use('/users', users)
+app.use('/events', events)
 app.use('/drinks', drinks)
-app.use('/token', token);
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

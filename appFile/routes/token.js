@@ -1,3 +1,4 @@
+'use strict'
 const express= require('express');
 const router= express.Router();
 const jwt= require('jsonwebtoken');
@@ -6,8 +7,8 @@ const knex= require('../knex');
 const emailReg= /@/;
 const boom= require('boom')
 
-router.get('/', function(err, req, res, next) {
 
+router.get('/', function(req, res, next) {
   jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, _payload)=>{
     if(err){
       return res.send(false)
@@ -16,7 +17,7 @@ router.get('/', function(err, req, res, next) {
   })
 });
 
-router.post('/', (err, req, res, next)=>{
+router.post('/', (req, res, next)=>{
   if(!req.body.email||!req.body.email.trim()||emailReg.test(req.body.email)===false){
     return next(boom.create(400, 'please input an email'))
   }
@@ -27,7 +28,6 @@ router.post('/', (err, req, res, next)=>{
     if(user.length===0){
       return next(boom.create(400, 'invalid email or password'))
     }
-
     if(req.body.password!==user[0]['password']){
       return next(boom.create(400, 'invalid email or password'))
     }

@@ -5,7 +5,7 @@ exports.seed = function(knex, Promise) {
     .then(function () {
       // Inserts seed entries
       return knex('events').insert([
-        {id: 1, name: 'Block Party', date:'1992-08-05', user_id:1}
+        {id: 1, name: 'Landing Page', date:'1992-08-05', user_id:1}
       ]);
     });
 };
