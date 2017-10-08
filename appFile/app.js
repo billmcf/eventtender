@@ -36,6 +36,9 @@ app.use('/users', users);
 app.use('/auth/facebook', facebook);
 app.use('/favorites', favorites);
 app.use('/token', token);
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 
 
