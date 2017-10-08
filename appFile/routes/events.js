@@ -13,9 +13,15 @@ router.get('/', function(req, res, next) {
     if(events.length===0){
       res.send("No events created yet")
     }else if(events.length>0){
+      for(var i=0; i<events.length; i++){
+        delete events[i]['user_id']
+      }
       res.send(events)
     }
   })
+  .catch((err) => {
+      next(err);
+    });
 });
 router.post('/', (req, res, next)=>{
   if(Object.keys(req.cookies).length===0){
@@ -31,6 +37,9 @@ router.post('/', (req, res, next)=>{
         delete event[0].user_id
         res.send(event)
       })
+      .catch((err) => {
+      next(err);
+    });
     })
   })
 })
@@ -46,7 +55,6 @@ router.delete('/', (req, res, next)=>{
     return next(boom.create(400, 'Event ID must be an integer'));
 }
   var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY)
-
   knex('events').select('id').where({user_id: reveal}).then((id)=>{
     if(id.length===0){
       return next(boom.create(400, 'You have no events to delete.'))
@@ -60,7 +68,12 @@ router.delete('/', (req, res, next)=>{
     if(trackerPing===0){
       return next(boom.create(400, 'Event is not associated with your account'))
     }else{
-      res.send('We found the event')
+      knex('events').delete().where({id: eventId}).then(()=>{
+        res.send('the deed is done')
+      })
+      .catch((err) => {
+      next(err);
+    });
     }
   })
 })
