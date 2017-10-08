@@ -7,12 +7,6 @@ const jwt= require('jsonwebtoken')
 var emailReg=/@/;
 
 router.post('/', function(req, res, next) {
-  if(!req.body.first_name||!req.body.first_name.trim()){
-    return next(boom.create(400, 'please provide a first name'));
-  }
-  if(!req.body.last_name||!req.body.last_name.trim()){
-    return next(boom.create(400, 'please provide a first and last name'));
-  }
   if(!req.body.email||!req.body.email.trim()||emailReg.test(req.body.email)===false){
     return next(boom.create(400, 'please provide a valid email'));
   }
