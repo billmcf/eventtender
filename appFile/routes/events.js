@@ -27,6 +27,12 @@ router.post('/', (req, res, next)=>{
   if(Object.keys(req.cookies).length===0){
     return next(boom.create(400, 'user access only'));
   }
+  if(!req.body.name||!req.body.name.trim()){
+    return next(boom.create(400, 'please provide a name'));
+  }
+  if(!req.body.date||!req.body.date.trim()){
+    return next(boom.create(400, 'please provide a type'));
+  }
   var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY);
   req.body.user_id=reveal;
   knex('events').max('id').then((max)=>{
