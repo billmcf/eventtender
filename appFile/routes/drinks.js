@@ -44,7 +44,7 @@ router.post('/', (req, res, next) => {
 
 
 
-
+//if post or delete routers break take a look at triple vs double
 
 
   knex('events').select('id').where({id: event_id}).then((event) => {
