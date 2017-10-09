@@ -1,2 +1,2 @@
 # eventtender
-Mixology guide for events or induviduals
+Mixology guide for events or individuals
