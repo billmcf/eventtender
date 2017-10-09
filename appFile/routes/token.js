@@ -17,6 +17,7 @@ router.get('/', function(req, res, next) {
 });
 //layer in error catchers to prevent random logins
 router.post('/', (req, res, next)=>{
+console.log(req.body)
   if(!req.body.email||!req.body.email.trim()||emailReg.test(req.body.email)===false){
     return next(boom.create(400, 'please input an email'))
   }
@@ -27,9 +28,11 @@ router.post('/', (req, res, next)=>{
     if(user.length===0){
       return next(boom.create(400, 'invalid email or password'))
     }
+
     if(req.body.password!==user[0]['password']){
       return next(boom.create(400, 'invalid email or password'))
     }
+
     knex('users').where({email: req.body.email}).then((user)=>{
       var idOfInterest=user[0]['id'];
       var token= jwt.sign(idOfInterest, process.env.SECRET_KEY);
@@ -48,7 +51,7 @@ router.post('/', (req, res, next)=>{
 router.delete('/', (req, res)=>{
 
   res.clearCookie('token')
-  res.end();
+  res.end('logout succesful');
 })
 
 
