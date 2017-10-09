@@ -3,12 +3,14 @@ var knex = require('../knex')
 var router = express.Router();
 const boom = require('boom')
 const jwt = require('jsonwebtoken')
+
 var drinkPing = 0;
 
 router.get('/:id', function(req, res, next) {
   if (Object.keys(req.cookies).length === 0) {
     return next(boom.create(400, 'user access only'));
   }
+  //figure out a way to make it so only the proprietor of the event can see the drinks
   knex('events').where({id: req.params.id}).then((event) => {
     if (event.length === 0) {
       return next(boom.create(400, "Event does not exist"))
@@ -39,6 +41,12 @@ router.post('/', (req, res, next) => {
   }
   var reveal = jwt.verify(req.cookies.token, process.env.SECRET_KEY)
   var event_id = req.body.event_id
+
+
+
+
+
+
   knex('events').select('id').where({id: event_id}).then((event) => {
     if (event.length === 0) {
       return next(boom.create(400, 'event does not exist'))
@@ -47,10 +55,13 @@ router.post('/', (req, res, next) => {
       if (id.length === 0) {
         return next(boom.create(400, 'You have no events to post drinks to.'))
       }
+
       var trackerPing = 0;
+
       for (var i = 0; i < id.length; i++) {
-        if (id[i]['id'] === event_id) {
-          trackerPing++;
+
+        if (id[i]['id'] == event_id) {
+          trackerPing++
         }
       }
       if (trackerPing === 0) {
@@ -67,6 +78,7 @@ router.post('/', (req, res, next) => {
     })
   })
 })
+//Layer in error prevention for numbers being put in too high
 router.delete('/', (req, res, next) => {
   if (Object.keys(req.cookies).length === 0) {
     return next(boom.create(400, 'user access only'));

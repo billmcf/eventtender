@@ -9,14 +9,13 @@ const boom= require('boom')
 
 
 router.get('/', function(req, res, next) {
-  jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, _payload)=>{
-    if(err){
-      return res.send(false)
-    }
+  if(Object.keys(req.cookies).length===0){
+    res.send(false)
+  }else{
     res.send(true)
-  })
+  }
 });
-
+//layer in error catchers to prevent random logins
 router.post('/', (req, res, next)=>{
   if(!req.body.email||!req.body.email.trim()||emailReg.test(req.body.email)===false){
     return next(boom.create(400, 'please input an email'))
