@@ -45,7 +45,7 @@ router.post('/', (req, res, next) => {
     }
     knex('events').select('id').where({user_id: reveal}).then((id) => {
       if (id.length === 0) {
-        return next(boom.create(400, 'You have no events to delete drinks from.'))
+        return next(boom.create(400, 'You have no events to post drinks to.'))
       }
       var trackerPing = 0;
       for (var i = 0; i < id.length; i++) {
