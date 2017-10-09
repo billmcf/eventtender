@@ -31,7 +31,7 @@ router.post('/', (req, res, next)=>{
     return next(boom.create(400, 'please provide a name'));
   }
   if(!req.body.date||!req.body.date.trim()){
-    return next(boom.create(400, 'please provide a type'));
+    return next(boom.create(400, 'please provide a date'));
   }
   var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY);
   req.body.user_id=reveal;
@@ -53,11 +53,11 @@ router.delete('/', (req, res, next)=>{
   if(Object.keys(req.cookies).length===0){
     return next(boom.create(400, 'user access only'));
   }
-  if(!req.body.eventId){
+  if(!req.body.event_id){
     return next(boom.create(400, 'Please enter and event ID'));
   }
-  const eventId = Number.parseInt(req.body.eventId);
-  if (!Number.isInteger(eventId)) {
+  const event_id = Number.parseInt(req.body.event_id);
+  if (!Number.isInteger(event_id)) {
     return next(boom.create(400, 'Event ID must be an integer'));
 }
   var reveal= jwt.verify(req.cookies.token, process.env.SECRET_KEY)
@@ -67,14 +67,14 @@ router.delete('/', (req, res, next)=>{
     }
     var trackerPing=0;
     for(var i=0; i<id.length; i++){
-      if(id[i]['id']===eventId){
+      if(id[i]['id']===event_id){
         trackerPing++;
       }
     }
     if(trackerPing===0){
       return next(boom.create(400, 'Event is not associated with your account'))
     }else{
-      knex('events').delete().where({id: eventId}).then(()=>{
+      knex('events').delete().where({id: event_id}).then(()=>{
         res.send('the deed is done')
       })
       .catch((err) => {
